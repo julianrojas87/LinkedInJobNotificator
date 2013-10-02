@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="all" name="LinkedInJobNotificator">
+    <target name="init">
+        <path id="slee">
+            <pathelement location="lib/slee.jar"/>
+        </path>
+        <taskdef classname="org.mobicents.eclipslee.ant.SbbJar"
+            classpath="lib/slee-tasks.jar" name="sbbjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.EventJar"
+            classpath="lib/slee-tasks.jar" name="eventjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.ProfileSpecJar"
+            classpath="lib/slee-tasks.jar" name="profilespecjar"/>
+        <taskdef classname="org.mobicents.eclipslee.ant.DeployableJar"
+            classpath="lib/slee-tasks.jar" name="deployablejar"/>
+        <taskdef
+            classname="org.mobicents.eclipslee.ant.ResourceAdaptorTypeJar"
+            classpath="lib/slee-tasks.jar" name="resourceadaptortypejar"/>
+        <taskdef
+            classname="org.mobicents.eclipslee.ant.ResourceAdaptorJar"
+            classpath="lib/slee-tasks.jar" name="resourceadaptorjar"/>
+        <path id="ExternalComponents">
+            <pathelement location="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-events-2.4.0.FINAL.jar"/>
+            <pathelement location="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-ra-2.4.0.FINAL.jar"/>
+            <pathelement location="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-ratype-2.4.0.FINAL.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/WebServiceInvocator/jars/EndWSInvocator-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/WebServiceInvocator/jars/StartWSInvocator-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/StartGetDataTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/DataAccessService/jars/EndGetDataTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/SendEmailService/jars/StartSendEmailTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/SendEmailService/jars/EndSendEmailTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/MediaCall/jars/StartMediaCallTelcoService-event.jar"/>
+            <pathelement location="/home/julian/Telcomp-Workspace/MediaCall/jars/EndMediaCallTelcoService-event.jar"/>
+            <pathelement location="lib/servlet-api-5.0.16.jar"/>
+        </path>
+        <path id="path-LinkedInJobNotificatorCS-sbb">
+            <pathelement location="/home/julian/Telcomp-Workspace/LinkedInJobNotificator/lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-events-2.4.0.FINAL.jar"/>
+        </path>
+    </target>
+    <target depends="init" name="all">
+        <ant target="build-LinkedInJobNotificatorCS-sbb"/>
+        <ant target="build-linkedInJobNotificator-DU"/>
+    </target>
+    <target depends="init" name="clean">
+        <ant target="clean-LinkedInJobNotificatorCS-sbb"/>
+        <ant target="clean-linkedInJobNotificator-DU"/>
+    </target>
+    <target depends="init" name="build-LinkedInJobNotificatorCS-sbb">
+        <mkdir dir="classes/LinkedInJobNotificatorCS-sbb"/>
+        <mkdir dir="jars/"/>
+        <javac destdir="classes/LinkedInJobNotificatorCS-sbb"
+            includes="org/telcomp/sbb/LinkedInJobNotificatorCSSbb.java" srcdir="src">
+            <classpath>
+                <path refid="path-LinkedInJobNotificatorCS-sbb"/>
+                <path refid="ExternalComponents"/>
+                <path refid="slee"/>
+            </classpath>
+        </javac>
+        <sbbjar classpath="classes/LinkedInJobNotificatorCS-sbb"
+            destfile="jars/LinkedInJobNotificatorCS-sbb.jar" sbbjarxml="src/org/telcomp/sbb/LinkedInJobNotificatorCS-sbb-jar.xml"/>
+    </target>
+    <target name="clean-LinkedInJobNotificatorCS-sbb">
+        <delete file="jars/LinkedInJobNotificatorCS-sbb.jar"/>
+        <delete dir="classes/LinkedInJobNotificatorCS-sbb"/>
+    </target>
+    <target depends="build-LinkedInJobNotificatorCS-sbb" name="build-linkedInJobNotificator-DU">
+        <mkdir dir="classes/linkedInJobNotificator-DU"/>
+        <copy
+            file="src/org/telcomp/service/linkedInJobNotificator-deployable-unit.xml" tofile="classes/linkedInJobNotificator-DU/deployable-unit.xml"/>
+        <jar jarfile="jars/linkedInJobNotificator-DU.jar">
+            <metainf dir="classes/linkedInJobNotificator-DU" includes="deployable-unit.xml"/>
+            <fileset dir="" includes="jars/LinkedInJobNotificatorCS-sbb.jar"/>
+            <fileset dir="." includes="src/org/telcomp/service/linkedinJobNotificator-service.xml"/>
+        </jar>
+    </target>
+    <target name="clean-linkedInJobNotificator-DU">
+        <delete file="jars/linkedInJobNotificator-DU.jar"/>
+        <delete dir="classes/linkedInJobNotificator-DU"/>
+    </target>
+</project>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE deployable-unit PUBLIC "-//Sun Microsystems, Inc.//DTD JAIN SLEE Deployable Unit 1.1//EN" "http://java.sun.com/dtd/slee-deployable-unit_1_1.dtd">
+<deployable-unit>
+	<jar>jars/http-servlet-ratype-2.4.0.FINAL.jar</jar>
+	<jar>jars/http-servlet-events-2.4.0.FINAL.jar</jar>
+	<jar>jars/http-servlet-ra-2.4.0.FINAL.jar</jar>
+</deployable-unit>

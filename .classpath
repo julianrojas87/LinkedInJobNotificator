@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/slee.jar" sourcepath="lib/jslee-1_1-fr-api.zip"/>
+	<classpathentry kind="lib" path="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-events-2.4.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-ra-2.4.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="lib/DU/mobicents-slee-ra-http-servlet-DU-2.4.0.FINAL.jar/jars/http-servlet-ratype-2.4.0.FINAL.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-5.0.16.jar"/>
+	<classpathentry kind="lib" path="/WebServiceInvocator/jars/EndWSInvocator-event.jar"/>
+	<classpathentry kind="lib" path="/DataAccessService/jars/EndGetDataTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/DataAccessService/jars/StartGetDataTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/MediaCall/jars/EndMediaCallTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/MediaCall/jars/StartMediaCallTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/SendEmailService/jars/EndSendEmailTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/SendEmailService/jars/StartSendEmailTelcoService-event.jar"/>
+	<classpathentry kind="lib" path="/WebServiceInvocator/jars/StartWSInvocator-event.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
