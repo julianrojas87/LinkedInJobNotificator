@@ -11,6 +11,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.slee.ActivityContextInterface;
 import javax.slee.Address;
+import javax.slee.EventContext;
 import javax.slee.RolledBackContext;
 import javax.slee.SbbContext;
 import javax.slee.nullactivity.NullActivity;
@@ -47,66 +48,64 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 	static String startpv0;
 	
 	//Web Services Invocation Variables
-	//GetLinkedInJobs0
-	static HashMap<String, String> ws0operationInputs = new HashMap<String, String>();
-	static String ws0wsdl = "http://192.168.190.55:8084/EWSApp-war/LinkedInWebService?wsdl";
-	static String ws0operation = "getLinkedInJobs";
-	static String ws0ipn0 = "idLinkedInUser";
-	static String ws0ipv0;
-	static String ws0opn0 = "return";
-	static List<String> ws0opv0 = new ArrayList<String>();
-	//SendTwitterMessage0
-	static HashMap<String, String> ws1operationInputs = new HashMap<String, String>();
-	static String ws1wsdl = "http://192.168.190.55:8084/EWSApp-war/TwitterWebService?wsdl";
-	static String ws1operation = "sendTwitterMessage";
-	static String ws1ipn0 = "callee";
-	static String ws1ipv0;
-	static String ws1ipn1 = "text";
-	static String ws1ipv1;
-	static String ws1opn0 = "return";
-	static String ws1opv0;
+	//getLinkedInJobs0
+	static HashMap<String, String> getLinkedInJobs0operationInputs = new HashMap<String, String>();
+	static String getLinkedInJobs0wsdl = "http://192.168.190.55:8084/EWSApp-war/LinkedInWebService?wsdl";
+	static String getLinkedInJobs0operation = "getLinkedInJobs";
+	static String getLinkedInJobs0ipn0 = "idLinkedInUser";
+	static String getLinkedInJobs0ipv0;
+	static String getLinkedInJobs0opn0 = "return";
+	static List<String> getLinkedInJobs0opv0 = new ArrayList<String>();
+	//sendTwitterMessage0
+	static HashMap<String, String> sendTwitterMessage0operationInputs = new HashMap<String, String>();
+	static String sendTwitterMessage0wsdl = "http://192.168.190.55:8084/EWSApp-war/TwitterWebService?wsdl";
+	static String sendTwitterMessage0operation = "sendTwitterMessage";
+	static String sendTwitterMessage0ipn0 = "callee";
+	static String sendTwitterMessage0ipv0;
+	static String sendTwitterMessage0ipn1 = "text";
+	static String sendTwitterMessage0ipv1;
+	static String sendTwitterMessage0opn0 = "return";
+	static String sendTwitterMessage0opv0;
 	
 	//Telco Services I/O Parameters
 	//GetDataAccess0
-	static String ts0ip0;
-	static String ts0ip1 = "linkedinid"; //User defined input on creation time
-	static String ts0op0;
+	static String GetDataAccess0ip0;
+	static String GetDataAccess0ip1 = "linkedinid"; //User defined input on creation time
+	static String GetDataAccess0op0;
 	//GetDataAccess1
-	static String ts1ip0;
-	static String ts1ip1 = "twitterid"; //User defined input on creation time
-	static String ts1op0;
+	static String GetDataAccess1ip0;
+	static String GetDataAccess1ip1 = "twitterid"; //User defined input on creation time
+	static String GetDataAccess1op0;
 	//GetDataAccess2
-	static String ts2ip0;
-	static String ts2ip1 = "email"; //User defined input on creation time
-	static String ts2op0;
+	static String GetDataAccess2ip0;
+	static String GetDataAccess2ip1 = "email"; //User defined input on creation time
+	static String GetDataAccess2op0;
 	//SendEmailService0
-	static String ts3ip0;
-	static String ts3ip1;
-	static String ts3ip2 = ""; //User defined input on creation time
-	static boolean ts3op0;
+	static String SendEmailService0ip0;
+	static String SendEmailService0ip1;
+	static String SendEmailService0ip2 = ""; //User defined input on creation time
+	static boolean SendEmailService0op0;
 	//GetDataAccess3
-	static String ts4ip0;
-	static String ts4ip1 = "sipuri"; //User defined input on creation time
-	static String ts4op0;
+	static String GetDataAccess4ip0;
+	static String GetDataAccess4ip1 = "sipuri"; //User defined input on creation time
+	static String GetDataAccess4op0;
 	//MediaCallTelcoService0
-	static String ts5ip0;
-	static String ts5ip1;
-	static boolean ts5op0;
+	static String MediaCallTelcoService0ip0;
+	static String MediaCallTelcoService0ip1;
+	static boolean MediaCallTelcoService0op0;
+	
+	static HttpServletResponse httpResponse;
+	static ActivityContextInterface httpAci;
+	
 
-
-	public void onHttpGet (HttpServletRequestEvent event, ActivityContextInterface aci) {
+	public void onHttpGet (HttpServletRequestEvent event, ActivityContextInterface aci, EventContext context) {
 		if(event.getRequest().getPathInfo().indexOf("LinkedInJobNotificator") >= 0){
 			HttpServletResponse response = event.getResponse();
-			PrintWriter w = null;
-			try {
-				w = response.getWriter();
-				w.print("onGet OK! Served by SBB = " + this.sbbContext.getSbb().toString());
-				w.flush();
-				response.flushBuffer();
-				aci.detach(this.sbbContext.getSbbLocalObject());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			httpResponse = response;
+			httpAci = aci;
+			this.setEventContext(context);
+			
+			context.suspendDelivery();
 			
 			//Initial parameter mapping for start place
 			startpv0 = event.getRequest().getParameter(startpn0);
@@ -118,10 +117,10 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 			//Invoking DataAccess Service on step 1
 			mainControlFlow = 1;
 			//Parameters mapping
-			ts0ip0 = startpv0;
+			GetDataAccess0ip0 = startpv0;
 			HashMap<String, Object> operationInputs = new HashMap<String, Object>();
-			operationInputs.put("parameter", (String) ts0ip1);
-			operationInputs.put("identification", (String) ts0ip0);
+			operationInputs.put("parameter", (String) GetDataAccess0ip1);
+			operationInputs.put("identification", (String) GetDataAccess0ip0);
 			StartGetDataTelcoServiceEvent getDataEvent = new StartGetDataTelcoServiceEvent(operationInputs);
 			this.fireStartGetDataTelcoServiceEvent(getDataEvent, this.mainAci, null);
 			System.out.println("StartGetData Event fired on execution step: "+mainControlFlow);
@@ -136,17 +135,17 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 			//Setting mainAci object to current state
 			this.mainAci = aci;
 			//Getting DataAccess Service response data on step 2
-			ts0op0 = event.getValue();
+			GetDataAccess0op0 = event.getValue();
 			
 			//Invoking LinkedIn WS on step 2
 			mainControlFlow = 2;
 			//Parameters mapping
-			ws0ipv0 = ts0op0;
-			ws0operationInputs.put(ws0ipn0, ws0ipv0);
+			getLinkedInJobs0ipv0 = GetDataAccess0op0;
+			getLinkedInJobs0operationInputs.put(getLinkedInJobs0ipn0, getLinkedInJobs0ipv0);
 			HashMap<String, Object> hashMap = new HashMap<String, Object>();
-			hashMap.put("serviceWSDL", (String) ws0wsdl);
-			hashMap.put("operationName", (String) ws0operation);
-			hashMap.put("operationInputs", (HashMap<String, String>) ws0operationInputs);
+			hashMap.put("serviceWSDL", (String) getLinkedInJobs0wsdl);
+			hashMap.put("operationName", (String) getLinkedInJobs0operation);
+			hashMap.put("operationInputs", (HashMap<String, String>) getLinkedInJobs0operationInputs);
 			hashMap.put("backupFile", (String) "");
 			StartWSInvocatorEvent startWS = new StartWSInvocatorEvent(hashMap);
 			this.fireStartWSInvocatorEvent(startWS, this.mainAci, null);
@@ -160,17 +159,17 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 				//Setting AND-split1 Activity object to current state
 				this.andSplit1Aci = aci;
 				//Getting DataAccess Service response data on step AND-split1 2
-				ts2op0 = event.getValue();
+				GetDataAccess2op0 = event.getValue();
 				
 				//Invoking SendEmail Service on step AND-split1 2
 				branchControlFlow1 = 2;
 				//Parameter mapping
-				ts3ip0 = ts2op0;
-				ts3ip1 = ws0opv0.get(0); //Only getting the first element of the array
+				SendEmailService0ip0 = GetDataAccess2op0;
+				SendEmailService0ip1 = getLinkedInJobs0opv0.get(0); //Only getting the first element of the array
 				HashMap<String, Object> operationInputs = new HashMap<String, Object>();
-				operationInputs.put("email", (String) ts3ip0);
-				operationInputs.put("message", (String) ts3ip1);
-				operationInputs.put("subject", ts3ip2);
+				operationInputs.put("email", (String) SendEmailService0ip0);
+				operationInputs.put("message", (String) SendEmailService0ip1);
+				operationInputs.put("subject", SendEmailService0ip2);
 				StartSendEmailTelcoServiceEvent sendEmailEvent = new StartSendEmailTelcoServiceEvent(operationInputs);
 				this.fireStartSendEmailTelcoServiceEvent(sendEmailEvent, this.andSplit1Aci, null);
 			}
@@ -181,20 +180,20 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 				//Setting AND-split2 Activity object to current state
 				this.andSplit2Aci = aci;
 				//Getting DataAccess Service response data on step AND-split2 2
-				ts1op0 = event.getValue();
+				GetDataAccess1op0 = event.getValue();
 				
 				//Invoking Twitter WS on step AND-split2 2
 				branchControlFlow2 = 2;
 				//Parameter mapping
-				ws1ipv0 = ts1op0;
-				ws1ipv1 = ws0opv0.get(0); //Only getting the first element of the array
-				ws1operationInputs.put(ws1ipn0, ws1ipv0);
-				ws1operationInputs.put(ws1ipn1, ws1ipv1);
+				sendTwitterMessage0ipv0 = GetDataAccess1op0;
+				sendTwitterMessage0ipv1 = getLinkedInJobs0opv0.get(0); //Only getting the first element of the array
+				sendTwitterMessage0operationInputs.put(sendTwitterMessage0ipn0, sendTwitterMessage0ipv0);
+				sendTwitterMessage0operationInputs.put(sendTwitterMessage0ipn1, sendTwitterMessage0ipv1);
 				
 				HashMap<String, Object> hashMap = new HashMap<String, Object>();
-				hashMap.put("serviceWSDL", (String) ws1wsdl);
-				hashMap.put("operationName", (String) ws1operation);
-				hashMap.put("operationInputs", (HashMap<String, String>) ws1operationInputs);
+				hashMap.put("serviceWSDL", (String) sendTwitterMessage0wsdl);
+				hashMap.put("operationName", (String) sendTwitterMessage0operation);
+				hashMap.put("operationInputs", (HashMap<String, String>) sendTwitterMessage0operationInputs);
 				hashMap.put("backupFile", (String) "");
 				StartWSInvocatorEvent wsEvent = new StartWSInvocatorEvent(hashMap);
 				this.fireStartWSInvocatorEvent(wsEvent, this.andSplit2Aci, null);
@@ -205,16 +204,16 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 			//Setting main Activity object to current state
 			this.mainAci = aci;
 			//Getting DataAccess Service response data on step 6
-			ts4op0 = event.getValue();
+			GetDataAccess4op0 = event.getValue();
 			
 			//Invoking MediaCall Service on step 6
 			mainControlFlow = 6;
 			//Parameter mapping
-			ts5ip0 = ts4op0;
-			ts5ip1 = ws0opv0.get(0); //Only getting the first element of the array
+			MediaCallTelcoService0ip0 = GetDataAccess4op0;
+			MediaCallTelcoService0ip1 = getLinkedInJobs0opv0.get(0); //Only getting the first element of the array
 			HashMap<String, Object> operationInputs = new HashMap<String, Object>();
-			operationInputs.put("uriSip", (String) ts5ip0);
-			operationInputs.put("text", (String) ts5ip1);
+			operationInputs.put("uriSip", (String) MediaCallTelcoService0ip0);
+			operationInputs.put("text", (String) MediaCallTelcoService0ip1);
 			StartMediaCallTelcoServiceEvent mediaCallEvent = new StartMediaCallTelcoServiceEvent(operationInputs);
 			this.fireStartMediaCallTelcoServiceEvent(mediaCallEvent, this.mainAci, null);
 			
@@ -230,7 +229,7 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 			this.mainAci = aci;
 			//Getting Web Service response Data on step 3
 			mainControlFlow = 3;
-			ws0opv0 = event.getOperationOutputs().get(ws0opn0);
+			getLinkedInJobs0opv0 = event.getOperationOutputs().get(getLinkedInJobs0opn0);
 			
 			//AND-split control element
 			mainControlFlow = 4;
@@ -243,20 +242,20 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 			//Invoking DataAccess Service on execution step AND-split1 1 
 			branchControlFlow1 = 1;
 			//Parameter mapping
-			ts2ip0 = startpv0;
+			GetDataAccess2ip0 = startpv0;
 			HashMap<String, Object> operationInputs1 = new HashMap<String, Object>();
-			operationInputs1.put("parameter", (String) ts2ip1);
-			operationInputs1.put("identification", (String) ts2ip0);
+			operationInputs1.put("parameter", (String) GetDataAccess2ip1);
+			operationInputs1.put("identification", (String) GetDataAccess2ip0);
 			StartGetDataTelcoServiceEvent dataAccessEvent1 = new StartGetDataTelcoServiceEvent(operationInputs1);
 			this.fireStartGetDataTelcoServiceEvent(dataAccessEvent1, this.andSplit1Aci, null);
 			
 			//Invoking DataAccess Service on execution step AND-split2 1
 			branchControlFlow2 = 1;
 			//Parameter mapping
-			ts1ip0 = startpv0;
+			GetDataAccess1ip0 = startpv0;
 			HashMap<String, Object> operationInputs2 = new HashMap<String, Object>();
-			operationInputs2.put("parameter", (String) ts1ip1);
-			operationInputs2.put("identification", (String) ts1ip0);
+			operationInputs2.put("parameter", (String) GetDataAccess1ip1);
+			operationInputs2.put("identification", (String) GetDataAccess1ip0);
 			StartGetDataTelcoServiceEvent dataAccessEvent2 = new StartGetDataTelcoServiceEvent(operationInputs2);
 			this.fireStartGetDataTelcoServiceEvent(dataAccessEvent2, this.andSplit2Aci, null);
 			
@@ -268,7 +267,7 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 				this.andSplit2Aci = aci;
 				//Getting Web Service Response data on step AND-split 3
 				branchControlFlow2 = 3;
-				ws1opv0 = event.getOperationOutputs().get(ws1opn0).get(0);
+				sendTwitterMessage0opv0 = event.getOperationOutputs().get(sendTwitterMessage0opn0).get(0);
 				
 				//Detaching parallel activity object
 				this.andSplit2Aci.detach(this.sbbContext.getSbbLocalObject());
@@ -281,10 +280,10 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 					branchControlFlow1 = 0;
 					branchControlFlow2 = 0;
 					//Parameter mapping
-					ts4ip0 = startpv0;
+					GetDataAccess4ip0 = startpv0;
 					HashMap<String, Object> operationInputs = new HashMap<String, Object>();
-					operationInputs.put("parameter", (String) ts4ip1);
-					operationInputs.put("identification", (String) ts4ip0);
+					operationInputs.put("parameter", (String) GetDataAccess4ip1);
+					operationInputs.put("identification", (String) GetDataAccess4ip0);
 					StartGetDataTelcoServiceEvent dataAccessEvent = new StartGetDataTelcoServiceEvent(operationInputs);
 					this.fireStartGetDataTelcoServiceEvent(dataAccessEvent, this.mainAci, null);
 				}
@@ -304,7 +303,7 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 				this.andSplit1Aci = aci;
 				//Getting SendEmail Service response on step AND-split1 3
 				branchControlFlow1 = 3;
-				ts3op0 = event.getSended();
+				SendEmailService0op0 = event.getSended();
 				
 				//Detaching parallel activity object
 				this.andSplit1Aci.detach(this.sbbContext.getSbbLocalObject());
@@ -317,10 +316,10 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 					branchControlFlow1 = 0;
 					branchControlFlow2 = 0;
 					//Parameter mapping
-					ts4ip0 = startpv0;
+					GetDataAccess4ip0 = startpv0;
 					HashMap<String, Object> operationInputs = new HashMap<String, Object>();
-					operationInputs.put("parameter", (String) ts4ip1);
-					operationInputs.put("identification", (String) ts4ip0);
+					operationInputs.put("parameter", (String) GetDataAccess4ip1);
+					operationInputs.put("identification", (String) GetDataAccess4ip0);
 					StartGetDataTelcoServiceEvent dataAccessEvent = new StartGetDataTelcoServiceEvent(operationInputs);
 					this.fireStartGetDataTelcoServiceEvent(dataAccessEvent, this.mainAci, null);
 				}
@@ -328,16 +327,29 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 		}
 	}
 	
-	
 	public void onEndMediaCallTelcoServiceEvent(EndMediaCallTelcoServiceEvent event, ActivityContextInterface aci){
 		if(mainControlFlow == 6){
 			System.out.println("End MediaCall Event received on execution step: "+mainControlFlow);
 			//Setting main Activity object to current state
 			this.mainAci = aci;
 			//Getting MediaCall Service response on step 7
-			ts5op0 = event.getCommited();
+			MediaCallTelcoService0op0 = event.getCommited();
 			mainControlFlow = 7;
 			System.out.println("LinkedIn Job Notificator Service execution completed.");
+			
+			PrintWriter w = null;
+			try {
+				w = httpResponse.getWriter();
+				w.print("<http><body><center><h1>LinkedIn Job Notificator Service execution completed!!</h1></center></body></http>");
+				w.flush();
+				httpResponse.flushBuffer();
+				httpAci.detach(this.sbbContext.getSbbLocalObject());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			this.getEventContext().resumeDelivery();
+			
 			//Service execution completed
 			this.mainAci.detach(this.sbbContext.getSbbLocalObject());
 		}
@@ -349,8 +361,10 @@ public abstract class LinkedInJobNotificatorCSSbb implements javax.slee.Sbb {
 		nullActivityACI = this.nullACIFactory.getActivityContextInterface(nullActivity);
 		return nullActivityACI;
 	}
-
-
+	
+	
+	public abstract void setEventContext(EventContext context);
+	public abstract EventContext getEventContext();
 	
 	// TODO: Perform further operations if required in these methods.
 	public void setSbbContext(SbbContext context) { 

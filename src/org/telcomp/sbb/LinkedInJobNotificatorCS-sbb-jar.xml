@@ -10,6 +10,9 @@
         <sbb-classes>
             <sbb-abstract-class>
                 <sbb-abstract-class-name>org.telcomp.sbb.LinkedInJobNotificatorCSSbb</sbb-abstract-class-name>
+                <cmp-field>
+                    <cmp-field-name>eventContext</cmp-field-name>
+                </cmp-field>
             </sbb-abstract-class>
         </sbb-classes>
         <event event-direction="Receive" initial-event="True">
