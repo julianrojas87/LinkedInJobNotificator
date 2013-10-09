@@ -4,7 +4,7 @@
 <service-xml>
     <service>
         <description/>
-        <service-name>LinkedIn Job Notificator Service</service-name>
+        <service-name>LinkedIn Job Notificator Convergent Service</service-name>
         <service-vendor>Telcomp2.0</service-vendor>
         <service-version>1.0</service-version>
         <root-sbb>
